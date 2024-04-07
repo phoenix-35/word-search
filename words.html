@@ -17,15 +17,16 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const entriesContainer = document.getElementById('entriesContainer');
+            let currentPageNumber = 1; // Initialize the current page number
 
             // Function to display all output entries from local storage
             function displayOutputEntries() {
                 entriesContainer.innerHTML = ''; // Clear previous entries
-                let entriesPerPage = 10;
+                let entryCount = 0;
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
                     if (key.startsWith('outputText_')) {
-                        const pageNumber = Math.ceil((i + 1) / entriesPerPage);
+                        entryCount++;
                         const outputText = localStorage.getItem(key);
                         const copyButton = document.createElement('button');
                         copyButton.textContent = 'Copy';
@@ -39,11 +40,14 @@
                                 });
                         });
                         const pageLabel = document.createElement('div');
-                        pageLabel.textContent = `Page ${pageNumber}`;
+                        pageLabel.textContent = `Page ${currentPageNumber}`;
                         const entry = document.createElement('div');
                         entry.appendChild(pageLabel);
                         entry.appendChild(copyButton);
                         entriesContainer.appendChild(entry);
+                        if (entryCount % 10 === 0) { // If 10 entries are displayed, increment the page number
+                            currentPageNumber++;
+                        }
                     }
                 }
             }
