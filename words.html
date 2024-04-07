@@ -70,21 +70,21 @@
                 }
             });
 
-            // Event listener for the toggle switch
-            toggleSwitch.addEventListener('change', function () {
-                if (this.checked) {
-                    localStorage.setItem('toggleSwitchState', 'on');
-                    // Update the display
-                    displayOutputEntries();
-                    // Update the page label
-                    updatePageLabel();
-                } else {
-                    localStorage.setItem('toggleSwitchState', 'off');
-                    // Clear all output entries when switch is turned off
-                    clearOutputEntries();
-                    // Update the page label to default
-                    pageLabel.textContent = "Page 1";
-                }
+            // Function to save output to local storage
+            function saveOutputToLocalStorage(outputText) {
+                let pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
+                const key = `outputText_${pageNumber}`;
+                localStorage.setItem(key, outputText);
+                pageNumber++;
+                localStorage.setItem('pageNumber', pageNumber);
+                updatePageLabel();
+            }
+
+            // New event listener for copy button in the second code
+            document.getElementById('copyButton').addEventListener('click', function () {
+                const outputText = document.getElementById('inputTextarea').value;
+                saveOutputToLocalStorage(outputText);
+                displayOutputEntries();
             });
 
             // Display the output entries from local storage
