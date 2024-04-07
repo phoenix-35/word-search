@@ -25,9 +25,9 @@
             <div id="input-fields">
                 <textarea id="inputTextarea" name="inputField1" rows="8" cols="30" placeholder="Enter your text here"></textarea>
             </div>
+            <div id="outputResult"></div>
             <button type="button" id="pasteButton" class="submit-button">Paste</button>
            <button type="button" id="copyButton" class="submit-button">Copy</button>
-            <div id="outputResult"></div>
         </form>
     </div>
 
@@ -74,9 +74,10 @@
     localStorage.setItem('outputText', outputText);
     console.log('Output copied to clipboard:', outputText);
 
-    // Display the saved output below the buttons
-    outputResult.textContent = `Saved Output: ${outputText}`;
+    // Redirect to "words.html" with output text as URL parameter
+    window.location.href = `words.html?output=${encodeURIComponent(outputText)}`;
 });
+
 
         textarea.addEventListener('input', function() {
             let lines = textarea.value.split('\n');
