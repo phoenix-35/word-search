@@ -43,11 +43,12 @@
 
             // Function to clear all output entries from local storage
             function clearOutputEntries() {
-    // Loop through localStorage in reverse order to avoid skipping entries when removing them
-    for (let i = localStorage.length - 1; i >= 0; i--) {
+    // Remove all entries that start with 'outputText_'
+    for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key.startsWith('outputText_')) {
             localStorage.removeItem(key);
+            i--; // Decrement i to account for removed entry
         }
     }
     // Reset the output entries count to 0
