@@ -49,6 +49,17 @@
 
             // Display the output entries from local storage
             displayOutputEntries();
+            
+            // Update output entries when a new value is added
+            document.getElementById('inputTextarea').addEventListener('input', function () {
+                const newValue = this.value.trim();
+                if (newValue !== '') {
+                    const maxPageNumber = localStorage.getItem('pageNumber') || 1;
+                    const key = `outputText_${maxPageNumber}`;
+                    localStorage.setItem(key, newValue);
+                    displayOutputEntries(); // Update displayed entries
+                }
+            });
         });
     </script>
 </body>
