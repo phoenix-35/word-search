@@ -40,23 +40,11 @@
             const toggleSwitch = document.getElementById('toggleSwitch');
             const track = document.querySelector('.track');
 
-            // Retrieve the toggle switch state from local storage on page load
-            const toggleSwitchState = localStorage.getItem('toggleSwitchState');
-            if (toggleSwitchState === 'on') {
-                toggleSwitch.checked = true;
-                track.style.backgroundColor = '#4bb543';
-            } else {
-                toggleSwitch.checked = false;
-                track.style.backgroundColor = 'gray';
-            }
-
             toggleSwitch.addEventListener('change', function () {
                 if (this.checked) {
                     track.style.backgroundColor = '#4bb543';
-                    localStorage.setItem('toggleSwitchState', 'on');
                 } else {
                     track.style.backgroundColor = 'gray';
-                    localStorage.setItem('toggleSwitchState', 'off');
                 }
             });
 
@@ -77,12 +65,22 @@
                     textarea.select();
                     document.execCommand('copy');
                     const outputText = textarea.value;
-                    localStorage.setItem('outputText', outputText);
+                    saveOutputToLocalStorage(outputText);
                     console.log('Output copied to clipboard:', outputText);
                 } else {
                     console.log('Toggle switch is not checked. Output not saved to local storage.');
                 }
             });
+
+            function saveOutputToLocalStorage(outputText) {
+                // Get the current page number
+                let pageNumber = localStorage.getItem('pageNumber') || 1;
+                // Store the output with a unique key for each page
+                localStorage.setItem(`outputText_${pageNumber}`, outputText);
+                // Increment the page number for the next output
+                pageNumber++;
+                localStorage.setItem('pageNumber', pageNumber);
+            }
 
             textarea.addEventListener('input', function () {
                 let lines = textarea.value.split('\n');
