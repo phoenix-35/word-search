@@ -26,6 +26,7 @@
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
                     if (key.startsWith('outputText_')) {
+                        entryCount++;
                         const outputText = localStorage.getItem(key);
                         const copyButton = document.createElement('button');
                         copyButton.textContent = 'Copy';
@@ -44,8 +45,7 @@
                         entry.appendChild(pageLabel);
                         entry.appendChild(copyButton);
                         entriesContainer.appendChild(entry);
-                        entryCount++;
-                        currentPageNumber = Math.ceil(entryCount / 10); // Calculate current page number
+                        currentPageNumber++; // Increment page number for each entry
                     }
                 }
             }
