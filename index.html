@@ -43,22 +43,24 @@
 
             // Function to clear all output entries from local storage
             function clearOutputEntries() {
-                // Create a list of keys to remove
-                const keysToRemove = [];
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key.startsWith('outputText_')) {
-                        keysToRemove.push(key);
-                    }
-                }
-                // Remove the keys from localStorage
-                keysToRemove.forEach(key => {
-                    localStorage.removeItem(key);
-                });
-                // Reset the output entries count to 0
-                localStorage.setItem('outputEntriesCount', 0);
-                updateWordEntriesCount(0);
-            }
+    // Create a list of keys to remove
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('outputText_')) {
+            keysToRemove.push(key);
+        }
+    }
+    // Remove the keys from localStorage
+    keysToRemove.forEach(key => {
+        localStorage.removeItem(key);
+    });
+    // Reset the output entries count to 0
+    localStorage.setItem('outputEntriesCount', 0);
+    // Reset the page number to 1
+    localStorage.setItem('pageNumber', 1);
+    updateWordEntriesCount(0);
+}
 
             // Retrieve the toggle switch state from local storage on page load
             const toggleSwitchState = localStorage.getItem('toggleSwitchState');
