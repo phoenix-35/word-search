@@ -17,77 +17,38 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const entriesContainer = document.getElementById('entriesContainer');
-            const appendSwitch = document.getElementById('appendSwitch');
 
             // Function to display all output entries from local storage
             function displayOutputEntries() {
                 entriesContainer.innerHTML = ''; // Clear previous entries
-                let serialNumber = 1;
-                let outputText = '';
-                while (true) {
-                    const key = `outputText_${serialNumber}`;
-                    const value = localStorage.getItem(key);
-                    if (value) {
-                        outputText += value + '\n'; // Append value with a new line separator
-                        serialNumber++;
-                    } else {
-                        break; // Exit loop if no value found for the key
+                const maxPageNumber = localStorage.getItem('pageNumber') || 1;
+                for (let i = 1; i <= maxPageNumber; i++) {
+                    const key = `outputText_${i}`;
+                    const outputText = localStorage.getItem(key);
+                    if (outputText) {
+                        const copyButton = document.createElement('button');
+                        copyButton.textContent = 'Copy';
+                        copyButton.addEventListener('click', function () {
+                            navigator.clipboard.writeText(outputText)
+                                .then(() => {
+                                    console.log('Output copied to clipboard:', outputText);
+                                })
+                                .catch(err => {
+                                    console.error('Failed to copy output to clipboard: ', err);
+                                });
+                        });
+                        const pageLabel = document.createElement('div');
+                        pageLabel.textContent = `Page ${i}`;
+                        const entry = document.createElement('div');
+                        entry.appendChild(pageLabel);
+                        entry.appendChild(copyButton);
+                        entriesContainer.appendChild(entry);
                     }
                 }
-                // Create a single entry for all output values
-                const copyButton = document.createElement('button');
-                copyButton.textContent = 'Copy';
-                copyButton.addEventListener('click', function () {
-                    navigator.clipboard.writeText(outputText.trim()) // Trim any leading or trailing whitespace
-                        .then(() => {
-                            console.log('Output copied to clipboard:', outputText.trim());
-                        })
-                        .catch(err => {
-                            console.error('Failed to copy output to clipboard: ', err);
-                        });
-                });
-                const entry = document.createElement('div');
-                entry.textContent = `Page 1`;
-                entry.appendChild(copyButton);
-                entriesContainer.appendChild(entry);
             }
 
             // Display the output entries from local storage
             displayOutputEntries();
-
-            // Listen for changes in the append switch
-            appendSwitch.addEventListener('change', function () {
-                if (this.checked) {
-                    // Append switch is checked, enable appending behavior
-                    enableAppending();
-                } else {
-                    // Append switch is unchecked, disable appending behavior
-                    disableAppending();
-                }
-            });
-
-            // Function to enable appending behavior
-            function enableAppending() {
-                // Listen for changes in the textarea
-                inputTextarea.addEventListener('input', appendToLocalStorage);
-            }
-
-            // Function to disable appending behavior
-            function disableAppending() {
-                // Stop listening for changes in the textarea
-                inputTextarea.removeEventListener('input', appendToLocalStorage);
-            }
-
-            // Function to append new entries to local storage
-            function appendToLocalStorage() {
-                const outputText = inputTextarea.value.trim(); // Trim any leading or trailing whitespace
-                const lastSerialNumber = parseInt(localStorage.getItem('pageNumber')) - 1;
-                const lastKey = `outputText_${lastSerialNumber}`;
-                const lastValue = localStorage.getItem(lastKey) || ''; // Get the last entry
-                const newKey = `outputText_${lastSerialNumber}`;
-                const newValue = `${lastValue}\n${outputText}`; // Append the new entry to the last one
-                localStorage.setItem(newKey, newValue);
-            }
         });
     </script>
 </body>
