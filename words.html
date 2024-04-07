@@ -15,13 +15,12 @@
     </div>
 
     <script>
-        // Retrieve data from localStorage and display it
-        const storedData = JSON.parse(localStorage.getItem("formData"));
-        if (storedData) {
-            const displayDataElement = document.getElementById("displayData");
-            const outputText = storedData.outputText;
-            displayDataElement.textContent = outputText;
-        }
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const outputText = params.get('output');
+            const outputResult = document.getElementById('outputResult');
+            outputResult.textContent = outputText;
+        };
     </script>
 </body>
 
