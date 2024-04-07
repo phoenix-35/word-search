@@ -111,19 +111,36 @@
             });
 
             function saveOutputToLocalStorage(outputText) {
-    // Get the current page number
     let pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
-    // Store the output with a unique key for each page
-    localStorage.setItem(`outputText_${pageNumber}`, outputText);
-    // Increment the page number for the next output
-    pageNumber++;
+    let outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
+
+    if (toggleSwitch.checked) {
+        // Append to existing entries based on serial number
+        const serialNumber = outputEntriesCount % 2 === 0 ? outputEntriesCount / 2 : Math.ceil(outputEntriesCount / 2);
+        const existingEntryKey = `outputText_${serialNumber}`;
+
+        // Check if there's an existing entry with the serial number
+        if (localStorage.getItem(existingEntryKey)) {
+            // Append to the existing entry
+            let existingEntry = localStorage.getItem(existingEntryKey);
+            existingEntry += '\n' + outputText;
+            localStorage.setItem(existingEntryKey, existingEntry);
+        } else {
+            // Create a new entry
+            localStorage.setItem(existingEntryKey, outputText);
+        }
+    } else {
+        // Store as a new entry without appending
+        localStorage.setItem(`outputText_${pageNumber}`, outputText);
+        pageNumber++;
+    }
+
     localStorage.setItem('pageNumber', pageNumber);
-    // Update the count of output entries
-    let outputEntriesCount = localStorage.getItem('outputEntriesCount') || 0;
     outputEntriesCount++;
     localStorage.setItem('outputEntriesCount', outputEntriesCount);
+
     updateWordEntriesCount(outputEntriesCount);
-            }
+}
 
             function updateWordEntriesCount(count) {
                 const wordEntries = document.getElementById('wordEntries');
