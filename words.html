@@ -12,19 +12,15 @@
     <div class="container">
         <h1>Words List</h1>
         <div id="outputResult"></div>
-        <div class="toggle-switch">
-            <input type="checkbox" id="toggleSwitch">
-            <label for="toggleSwitch" class="toggle-label">
-                <div class="track"></div>
-                <div class="ball"></div>
-            </label>
-        </div>
+        <div id="pageLabel">Page 1</div>
+        <button type="button" id="copyButton" class="submit-button">Copy</button>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const outputResult = document.getElementById('outputResult');
-            const toggleSwitch = document.getElementById('toggleSwitch');
+            const pageLabel = document.getElementById('pageLabel');
+            const copyButton = document.getElementById('copyButton');
 
             // Function to display all output entries from local storage
             function displayOutputEntries() {
@@ -48,30 +44,54 @@
                 }
             }
 
+            // Function to update the page label
+            function updatePageLabel() {
+                const pageNumber = localStorage.getItem('pageNumber') || 1;
+                pageLabel.textContent = "Page " + pageNumber;
+            }
+
             // Retrieve the toggle switch state from local storage on page load
             const toggleSwitchState = localStorage.getItem('toggleSwitchState');
             if (toggleSwitchState === 'on') {
-                toggleSwitch.checked = true;
+                // Update the display
+                displayOutputEntries();
+                // Update the page label
+                updatePageLabel();
             } else {
-                toggleSwitch.checked = false;
                 // Clear all output entries when switch is turned off
                 clearOutputEntries();
             }
 
+            // Event listener for the copy button
+            copyButton.addEventListener('click', function () {
+                const outputText = outputResult.textContent;
+                if (outputText) {
+                    navigator.clipboard.writeText(outputText)
+                        .then(() => {
+                            console.log('Output copied to clipboard:', outputText);
+                        })
+                        .catch(err => {
+                            console.error('Failed to copy output to clipboard: ', err);
+                        });
+                }
+            });
+
+            // Event listener for the toggle switch
             toggleSwitch.addEventListener('change', function () {
                 if (this.checked) {
                     localStorage.setItem('toggleSwitchState', 'on');
+                    // Update the display
+                    displayOutputEntries();
+                    // Update the page label
+                    updatePageLabel();
                 } else {
                     localStorage.setItem('toggleSwitchState', 'off');
                     // Clear all output entries when switch is turned off
                     clearOutputEntries();
+                    // Update the page label to default
+                    pageLabel.textContent = "Page 1";
                 }
-                // Update the display after toggle switch change
-                displayOutputEntries();
             });
-
-            // Display the output entries from local storage
-            displayOutputEntries();
         });
     </script>
 </body>
