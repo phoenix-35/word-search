@@ -39,15 +39,18 @@
                 let outputText = '';
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
+                    console.log("Key:", key); // Debugging: Log the key
                     if (key.startsWith('outputText_')) {
                         outputText += localStorage.getItem(key) + '\n';
                     }
                 }
+                console.log("Output Text:", outputText); // Debugging: Log the output text
                 outputResult.textContent = outputText || "No saved output available.";
             }
 
             // Retrieve the toggle switch state from local storage on page load
             const toggleSwitchState = localStorage.getItem('toggleSwitchState');
+            console.log("Toggle Switch State:", toggleSwitchState); // Debugging: Log the toggle switch state
             if (toggleSwitchState === 'on') {
                 toggleSwitch.checked = true;
                 track.style.backgroundColor = '#4bb543';
