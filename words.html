@@ -23,7 +23,8 @@
             function displayOutputEntries() {
                 entriesContainer.innerHTML = ''; // Clear previous entries
                 let entryCount = 0;
-                for (let i = 0; i < localStorage.length; i++) {
+                // Loop through local storage keys in reverse order
+                for (let i = localStorage.length - 1; i >= 0; i--) {
                     const key = localStorage.key(i);
                     if (key.startsWith('outputText_')) {
                         entryCount++;
