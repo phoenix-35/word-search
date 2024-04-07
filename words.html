@@ -25,16 +25,18 @@
             // Function to display all output entries from local storage
             function displayOutputEntries() {
                 entriesContainer.innerHTML = ''; // Clear previous entries
-                let currentPage = parseInt(localStorage.getItem('pageNumber')) || 1;
                 let entriesPerPage = 10;
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
                     if (key.startsWith('outputText_')) {
                         const pageNumber = Math.ceil((i + 1) / entriesPerPage);
-                        if (pageNumber === currentPage) {
-                            const entry = document.createElement('div');
-                            entry.textContent = localStorage.getItem(key);
-                            entriesContainer.appendChild(entry);
+                        const entry = document.createElement('div');
+                        entry.textContent = localStorage.getItem(key);
+                        entriesContainer.appendChild(entry);
+                        if (pageNumber > 1) {
+                            const pageLabel = document.createElement('div');
+                            pageLabel.textContent = "Page " + pageNumber;
+                            entriesContainer.appendChild(pageLabel);
                         }
                     }
                 }
