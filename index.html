@@ -41,6 +41,19 @@
             const toggleSwitch = document.getElementById('toggleSwitch');
             const track = document.querySelector('.track');
 
+            // Function to clear all output entries from local storage
+            function clearOutputEntries() {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('outputText_')) {
+                        localStorage.removeItem(key);
+                    }
+                }
+                // Reset the output entries count to 0
+                localStorage.setItem('outputEntriesCount', 0);
+                updateWordEntriesCount(0);
+            }
+
             // Retrieve the toggle switch state from local storage on page load
             const toggleSwitchState = localStorage.getItem('toggleSwitchState');
             if (toggleSwitchState === 'on') {
@@ -49,6 +62,8 @@
             } else {
                 toggleSwitch.checked = false;
                 track.style.backgroundColor = 'gray';
+                // Clear all output entries when switch is turned off
+                clearOutputEntries();
             }
 
             toggleSwitch.addEventListener('change', function () {
@@ -58,6 +73,8 @@
                 } else {
                     track.style.backgroundColor = 'gray';
                     localStorage.setItem('toggleSwitchState', 'off');
+                    // Clear all output entries when switch is turned off
+                    clearOutputEntries();
                 }
             });
 
