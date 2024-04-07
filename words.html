@@ -4,65 +4,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saved Outputs</title>
+    <title>Words List</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .container {
-            height: 80vh; /* Set a fixed height for the container */
-            overflow-y: auto; /* Enable vertical scrolling */
-        }
-
-        .output-container {
-            margin-bottom: 10px; /* Adjust margin as needed */
-        }
-
-        .copy-button {
-            margin-left: 10px; /* Adjust margin as needed */
-        }
-    </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Saved Outputs</h1>
-        <div id="outputsContainer"></div>
+        <h1>Words List</h1>
+        <div id="outputResult"></div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const outputsContainer = document.getElementById('outputsContainer');
+            const outputResult = document.getElementById('outputResult');
+            const toggleSwitch = document.getElementById('toggleSwitch');
+            const track = document.querySelector('.track');
 
-            // Retrieve the total number of pages from local storage
-            const pageNumber = localStorage.getItem('pageNumber') || 1;
-
-            // Loop through each page and create a copy button for each output
-            for (let i = 1; i < pageNumber; i++) {
-                const outputContainer = document.createElement('div');
-                outputContainer.classList.add('output-container');
-
-                const pageLabel = document.createElement('span');
-                pageLabel.textContent = `Page ${i}`;
-
-                const copyButton = document.createElement('button');
-                copyButton.textContent = "Copy";
-                copyButton.classList.add('submit-button', 'copy-button');
-                copyButton.onclick = function() {
-                    const outputText = localStorage.getItem(`outputText_${i}`);
-                    if (outputText) {
-                        navigator.clipboard.writeText(outputText)
-                            .then(() => {
-                                console.log('Output copied to clipboard:', outputText);
-                            })
-                            .catch(err => {
-                                console.error('Failed to copy output to clipboard:', err);
-                            });
+            // Function to clear all output entries from local storage
+            function clearOutputEntries() {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('outputText_')) {
+                        localStorage.removeItem(key);
                     }
-                };
+                }
+                // Reset the page number to 1
+                localStorage.setItem('pageNumber', 1);
+                // Reset the output entries count to 0
+                localStorage.setItem('outputEntriesCount', 0);
+            }
 
-                outputContainer.appendChild(pageLabel);
-                outputContainer.appendChild(copyButton);
+            // Retrieve the toggle switch state from local storage on page load
+            const toggleSwitchState = localStorage.getItem('toggleSwitchState');
+            if (toggleSwitchState === 'on') {
+                toggleSwitch.checked = true;
+                track.style.backgroundColor = '#4bb543';
+            } else {
+                toggleSwitch.checked = false;
+                track.style.backgroundColor = 'gray';
+                // Clear all output entries when switch is turned off
+                clearOutputEntries();
+            }
 
-                outputsContainer.appendChild(outputContainer);
+            toggleSwitch.addEventListener('change', function () {
+                if (this.checked) {
+                    track.style.backgroundColor = '#4bb543';
+                    localStorage.setItem('toggleSwitchState', 'on');
+                } else {
+                    track.style.backgroundColor = 'gray';
+                    localStorage.setItem('toggleSwitchState', 'off');
+                    // Clear all output entries when switch is turned off
+                    clearOutputEntries();
+                }
+            });
+
+            // Display the output text from local storage
+            const outputText = localStorage.getItem('outputText');
+            if (outputText) {
+                outputResult.textContent = outputText;
+            } else {
+                outputResult.textContent = "No saved output available.";
             }
         });
     </script>
