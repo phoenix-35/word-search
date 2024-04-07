@@ -21,24 +21,34 @@
             // Retrieve the total number of pages from local storage
             const pageNumber = localStorage.getItem('pageNumber') || 1;
 
-            // Loop through each page and display its output
+            // Loop through each page and create a copy button for each output
             for (let i = 1; i < pageNumber; i++) {
-                const outputText = localStorage.getItem(`outputText_${i}`);
-                if (outputText) {
-                    const outputContainer = document.createElement('div');
-                    outputContainer.classList.add('output-container');
+                const outputContainer = document.createElement('div');
+                outputContainer.classList.add('output-container');
 
-                    const pageLabel = document.createElement('span');
-                    pageLabel.textContent = `Page ${i}`;
+                const pageLabel = document.createElement('span');
+                pageLabel.textContent = `Page ${i}`;
 
-                    const outputDisplay = document.createElement('div');
-                    outputDisplay.textContent = outputText;
+                const copyButton = document.createElement('button');
+                copyButton.textContent = "Copy";
+                copyButton.classList.add('submit-button');
+                copyButton.onclick = function() {
+                    const outputText = localStorage.getItem(`outputText_${i}`);
+                    if (outputText) {
+                        navigator.clipboard.writeText(outputText)
+                            .then(() => {
+                                console.log('Output copied to clipboard:', outputText);
+                            })
+                            .catch(err => {
+                                console.error('Failed to copy output to clipboard:', err);
+                            });
+                    }
+                };
 
-                    outputContainer.appendChild(pageLabel);
-                    outputContainer.appendChild(outputDisplay);
+                outputContainer.appendChild(pageLabel);
+                outputContainer.appendChild(copyButton);
 
-                    outputsContainer.appendChild(outputContainer);
-                }
+                outputsContainer.appendChild(outputContainer);
             }
         });
     </script>
