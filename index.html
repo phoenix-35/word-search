@@ -42,13 +42,6 @@
 
     toggleSwitch.addEventListener('change', function() {
         if (this.checked) {
-                const outputText = processInput(inputTextarea.value);
-                localStorage.setItem('outputText', outputText);
-            } else {
-                localStorage.removeItem('outputText');
-        }
-        
-        if (this.checked) {
             track.style.backgroundColor = '#4bb543';
         } else {
             track.style.backgroundColor = 'gray';
