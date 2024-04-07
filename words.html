@@ -12,11 +12,19 @@
     <div class="container">
         <h1>Words List</h1>
         <div id="outputResult"></div>
+        <div class="toggle-switch">
+            <input type="checkbox" id="toggleSwitch">
+            <label for="toggleSwitch" class="toggle-label">
+                <div class="track"></div>
+                <div class="ball"></div>
+            </label>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const outputResult = document.getElementById('outputResult');
+            const toggleSwitch = document.getElementById('toggleSwitch');
 
             // Function to display all output entries from local storage
             function displayOutputEntries() {
@@ -29,6 +37,38 @@
                 }
                 outputResult.textContent = outputText || "No saved output available.";
             }
+
+            // Function to clear all output entries from local storage
+            function clearOutputEntries() {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('outputText_')) {
+                        localStorage.removeItem(key);
+                    }
+                }
+            }
+
+            // Retrieve the toggle switch state from local storage on page load
+            const toggleSwitchState = localStorage.getItem('toggleSwitchState');
+            if (toggleSwitchState === 'on') {
+                toggleSwitch.checked = true;
+            } else {
+                toggleSwitch.checked = false;
+                // Clear all output entries when switch is turned off
+                clearOutputEntries();
+            }
+
+            toggleSwitch.addEventListener('change', function () {
+                if (this.checked) {
+                    localStorage.setItem('toggleSwitchState', 'on');
+                } else {
+                    localStorage.setItem('toggleSwitchState', 'off');
+                    // Clear all output entries when switch is turned off
+                    clearOutputEntries();
+                }
+                // Update the display after toggle switch change
+                displayOutputEntries();
+            });
 
             // Display the output entries from local storage
             displayOutputEntries();
