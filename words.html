@@ -12,8 +12,8 @@
     <div class="container">
         <h1>Words List</h1>
         <div id="entriesContainer"></div>
-        <div id="pageLabel">Page 1</div>
-        <button type="button" id="copyButton" class="submit-button">Copy</button>
+        <div id="pageLabel" style="float: left;">Page 1</div>
+        <button type="button" id="copyButton" class="submit-button" style="float: right;">Copy</button>
     </div>
 
     <script>
@@ -37,7 +37,7 @@
 
             // Function to update the page label
             function updatePageLabel() {
-                const pageNumber = localStorage.getItem('pageNumber') || 1;
+                const pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
                 pageLabel.textContent = "Page " + pageNumber;
             }
 
@@ -81,6 +81,11 @@
                     pageLabel.textContent = "Page 1";
                 }
             });
+
+            // Display the output entries from local storage
+            displayOutputEntries();
+            // Update the page label
+            updatePageLabel();
         });
     </script>
 </body>
