@@ -40,11 +40,23 @@
             const toggleSwitch = document.getElementById('toggleSwitch');
             const track = document.querySelector('.track');
 
+            // Retrieve the toggle switch state from local storage on page load
+            const toggleSwitchState = localStorage.getItem('toggleSwitchState');
+            if (toggleSwitchState === 'on') {
+                toggleSwitch.checked = true;
+                track.style.backgroundColor = '#4bb543';
+            } else {
+                toggleSwitch.checked = false;
+                track.style.backgroundColor = 'gray';
+            }
+
             toggleSwitch.addEventListener('change', function () {
                 if (this.checked) {
                     track.style.backgroundColor = '#4bb543';
+                    localStorage.setItem('toggleSwitchState', 'on');
                 } else {
                     track.style.backgroundColor = 'gray';
+                    localStorage.setItem('toggleSwitchState', 'off');
                 }
             });
 
