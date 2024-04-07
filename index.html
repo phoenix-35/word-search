@@ -68,15 +68,17 @@
         });
 
         copyButton.addEventListener('click', function() {
-    textarea.select();
-    document.execCommand('copy');
-    const outputText = textarea.value;
-    localStorage.setItem('outputText', outputText);
-    console.log('Output copied to clipboard:', outputText);
-
-    });
-
-
+    if (toggleSwitch.checked) {
+        textarea.select();
+        document.execCommand('copy');
+        const outputText = textarea.value;
+        localStorage.setItem('outputText', outputText);
+        console.log('Output copied to clipboard:', outputText);
+    } else {
+        console.log('Toggle switch is not checked. Output not saved to local storage.');
+    }
+});
+        
         textarea.addEventListener('input', function() {
             let lines = textarea.value.split('\n');
             let filteredLines = lines.map(line => line.replace(/^\s*\d+\.\s*/, '')) // Remove bullet points
