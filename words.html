@@ -56,7 +56,9 @@
                 if (newValue !== '') {
                     const maxPageNumber = localStorage.getItem('pageNumber') || 1;
                     const key = `outputText_${maxPageNumber}`;
-                    localStorage.setItem(key, newValue);
+                    let existingValue = localStorage.getItem(key) || ''; // Retrieve existing value or use empty string if it doesn't exist
+                    existingValue += (existingValue ? '\n' : '') + newValue; // Append new value with a new line if there's an existing value
+                    localStorage.setItem(key, existingValue);
                     displayOutputEntries(); // Update displayed entries
                 }
             });
