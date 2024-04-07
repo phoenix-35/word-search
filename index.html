@@ -21,6 +21,7 @@
             </label>
         </div>
         <h1>Word Search Filter</h1>
+        <div id="wordEntries"></div> <!-- New div to display word entries -->
         <form id="myForm">
             <div id="input-fields">
                 <textarea id="inputTextarea" name="inputField1" rows="8" cols="30" placeholder="Enter your text here"></textarea>
@@ -121,6 +122,20 @@
                     successMessage.style.display = 'none';
                 }, 3000); // Hide the success message after 3 seconds
             });
+
+            // Fetch the number of word entries from "words.html" page
+            fetch('words.html')
+                .then(response => response.text())
+                .then(data => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data, 'text/html');
+                    const outputContainers = doc.querySelectorAll('.output-container');
+                    const wordEntries = document.getElementById('wordEntries');
+                    wordEntries.textContent = `Word Entries: ${outputContainers.length}`;
+                })
+                .catch(error => {
+                    console.error('Error fetching word entries:', error);
+                });
         });
     </script>
 </body>
