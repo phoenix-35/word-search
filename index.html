@@ -68,10 +68,15 @@
         });
 
         copyButton.addEventListener('click', function() {
-            textarea.select();
-            document.execCommand('copy');
-            console.log('Output copied to clipboard:', textarea.value);
-        });
+    textarea.select();
+    document.execCommand('copy');
+    const outputText = textarea.value;
+    localStorage.setItem('outputText', outputText);
+    console.log('Output copied to clipboard:', outputText);
+
+    // Display the saved output below the buttons
+    outputResult.textContent = `Saved Output: ${outputText}`;
+});
 
         textarea.addEventListener('input', function() {
             let lines = textarea.value.split('\n');
