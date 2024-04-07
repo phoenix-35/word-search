@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saved Outputs</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .output-container {
+            margin-bottom: 10px; /* Adjust margin as needed */
+        }
+
+        .copy-button {
+            margin-left: 10px; /* Adjust margin as needed */
+        }
+    </style>
 </head>
 
 <body>
@@ -31,7 +40,7 @@
 
                 const copyButton = document.createElement('button');
                 copyButton.textContent = "Copy";
-                copyButton.classList.add('submit-button');
+                copyButton.classList.add('submit-button', 'copy-button');
                 copyButton.onclick = function() {
                     const outputText = localStorage.getItem(`outputText_${i}`);
                     if (outputText) {
