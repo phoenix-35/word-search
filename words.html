@@ -8,22 +8,49 @@
 </head>
 <body>
     <div class="container">
-    <h1>Words List</h1>
-    <div id="outputResult"></div>
+        <h1>Words List</h1>
+        <div id="outputResult"></div>
     </div>
+
     <script>
         window.onload = function() {
             // Retrieve output text from local storage
             const outputText = localStorage.getItem('outputText');
             const outputResult = document.getElementById('outputResult');
             
-            // Display the output text
+            // Display "Page 1" and copy button
             if (outputText) {
-                outputResult.textContent = outputText;
+                const outputContainer = document.createElement('div');
+                outputContainer.classList.add('output-container');
+
+                const pageLabel = document.createElement('span');
+                pageLabel.textContent = "Page 1";
+
+                const copyButton = document.createElement('button');
+                copyButton.textContent = "Copy";
+                copyButton.classList.add('submit-button');
+                copyButton.onclick = function() {
+                    copyToClipboard(outputText);
+                };
+
+                outputContainer.appendChild(pageLabel);
+                outputContainer.appendChild(copyButton);
+
+                outputResult.appendChild(outputContainer);
             } else {
                 outputResult.textContent = "No saved output available.";
             }
         };
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    console.log('Text copied to clipboard:', text);
+                })
+                .catch(err => {
+                    console.error('Failed to copy text to clipboard: ', err);
+                });
+        }
     </script>
 </body>
 </html>
