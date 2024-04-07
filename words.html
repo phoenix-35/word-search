@@ -17,6 +17,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const entriesContainer = document.getElementById('entriesContainer');
+            const appendSwitch = document.getElementById('appendSwitch');
 
             // Function to display all output entries from local storage
             function displayOutputEntries() {
@@ -53,6 +54,40 @@
 
             // Display the output entries from local storage
             displayOutputEntries();
+
+            // Listen for changes in the append switch
+            appendSwitch.addEventListener('change', function () {
+                if (this.checked) {
+                    // Append switch is checked, enable appending behavior
+                    enableAppending();
+                } else {
+                    // Append switch is unchecked, disable appending behavior
+                    disableAppending();
+                }
+            });
+
+            // Function to enable appending behavior
+            function enableAppending() {
+                // Listen for changes in the textarea
+                inputTextarea.addEventListener('input', appendToLocalStorage);
+            }
+
+            // Function to disable appending behavior
+            function disableAppending() {
+                // Stop listening for changes in the textarea
+                inputTextarea.removeEventListener('input', appendToLocalStorage);
+            }
+
+            // Function to append new entries to local storage
+            function appendToLocalStorage() {
+                const outputText = inputTextarea.value.trim(); // Trim any leading or trailing whitespace
+                const lastSerialNumber = parseInt(localStorage.getItem('pageNumber')) - 1;
+                const lastKey = `outputText_${lastSerialNumber}`;
+                const lastValue = localStorage.getItem(lastKey) || ''; // Get the last entry
+                const newKey = `outputText_${lastSerialNumber}`;
+                const newValue = `${lastValue}\n${outputText}`; // Append the new entry to the last one
+                localStorage.setItem(newKey, newValue);
+            }
         });
     </script>
 </body>
