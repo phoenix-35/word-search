@@ -74,9 +74,7 @@
     localStorage.setItem('outputText', outputText);
     console.log('Output copied to clipboard:', outputText);
 
-    // Redirect to "words.html" with output text as URL parameter
-    window.location.href = `words.html?output=${encodeURIComponent(outputText)}`;
-});
+    });
 
 
         textarea.addEventListener('input', function() {
