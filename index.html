@@ -123,19 +123,10 @@
                 }, 3000); // Hide the success message after 3 seconds
             });
 
-            // Fetch the number of word entries from "words.html" page
-            fetch('words.html')
-                .then(response => response.text())
-                .then(data => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(data, 'text/html');
-                    const outputContainers = doc.querySelectorAll('.output-container');
-                    const wordEntries = document.getElementById('wordEntries');
-                    wordEntries.textContent = `Word Entries: ${outputContainers.length}`;
-                })
-                .catch(error => {
-                    console.error('Error fetching word entries:', error);
-                });
+            // Retrieve the number of word entries from local storage and display it
+            const wordEntriesCount = localStorage.getItem('wordEntriesCount') || 0;
+            const wordEntries = document.getElementById('wordEntries');
+            wordEntries.textContent = `Word Entries: ${wordEntriesCount}`;
         });
     </script>
 </body>
