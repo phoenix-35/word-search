@@ -20,6 +20,7 @@
 
             // Function to display all output entries from local storage
             function displayOutputEntries() {
+                console.log('Displaying output entries');
                 entriesContainer.innerHTML = ''; // Clear previous entries
                 const maxPageNumber = localStorage.getItem('pageNumber') || 1;
                 for (let i = 1; i <= maxPageNumber; i++) {
@@ -52,11 +53,14 @@
             
             // Update output entries when a new value is added
             document.getElementById('inputTextarea').addEventListener('input', function () {
+                console.log('Input event triggered');
                 const newValue = this.value.trim();
                 if (newValue !== '') {
+                    console.log('New value:', newValue);
                     const maxPageNumber = localStorage.getItem('pageNumber') || 1;
                     const key = `outputText_${maxPageNumber}`;
                     let existingValue = localStorage.getItem(key) || ''; // Retrieve existing value or use empty string if it doesn't exist
+                    console.log('Existing value:', existingValue);
                     existingValue += (existingValue ? '\n' : '') + newValue; // Append new value with a new line if there's an existing value
                     localStorage.setItem(key, existingValue);
                     displayOutputEntries(); // Update displayed entries
