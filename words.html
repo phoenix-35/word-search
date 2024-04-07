@@ -17,61 +17,18 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const outputResult = document.getElementById('outputResult');
-            const toggleSwitch = document.getElementById('toggleSwitch');
-            const track = document.querySelector('.track');
-
-            // Function to clear all output entries from local storage
-            function clearOutputEntries() {
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key.startsWith('outputText_')) {
-                        localStorage.removeItem(key);
-                    }
-                }
-                // Reset the page number to 1
-                localStorage.setItem('pageNumber', 1);
-                // Reset the output entries count to 0
-                localStorage.setItem('outputEntriesCount', 0);
-            }
 
             // Function to display all output entries from local storage
             function displayOutputEntries() {
                 let outputText = '';
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
-                    console.log("Key:", key); // Debugging: Log the key
                     if (key.startsWith('outputText_')) {
                         outputText += localStorage.getItem(key) + '\n';
                     }
                 }
-                console.log("Output Text:", outputText); // Debugging: Log the output text
                 outputResult.textContent = outputText || "No saved output available.";
             }
-
-            // Retrieve the toggle switch state from local storage on page load
-            const toggleSwitchState = localStorage.getItem('toggleSwitchState');
-            console.log("Toggle Switch State:", toggleSwitchState); // Debugging: Log the toggle switch state
-            if (toggleSwitchState === 'on') {
-                toggleSwitch.checked = true;
-                track.style.backgroundColor = '#4bb543';
-            } else {
-                toggleSwitch.checked = false;
-                track.style.backgroundColor = 'gray';
-                // Clear all output entries when switch is turned off
-                clearOutputEntries();
-            }
-
-            toggleSwitch.addEventListener('change', function () {
-                if (this.checked) {
-                    track.style.backgroundColor = '#4bb543';
-                    localStorage.setItem('toggleSwitchState', 'on');
-                } else {
-                    track.style.backgroundColor = 'gray';
-                    localStorage.setItem('toggleSwitchState', 'off');
-                    // Clear all output entries when switch is turned off
-                    clearOutputEntries();
-                }
-            });
 
             // Display the output entries from local storage
             displayOutputEntries();
