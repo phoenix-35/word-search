@@ -1,33 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Page</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Saved Output</title>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Data Page</h1>
-        <div id="displayData"></div>
-    </div>
+    <div id="outputResult"></div>
 
     <script>
         window.onload = function() {
-            // Retrieve output text from local storage
-            const outputText = localStorage.getItem('outputText');
+            const params = new URLSearchParams(window.location.search);
+            const outputText = params.get('output');
             const outputResult = document.getElementById('outputResult');
-            
-            // Display the output text
-            if (outputText) {
-                outputResult.textContent = outputText;
-            } else {
-                outputResult.textContent = "No saved output available.";
-            }
+            outputResult.textContent = outputText;
         };
     </script>
 </body>
-
 </html>
