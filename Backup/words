@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Words List</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Words List</h1>
+        <div id="entriesContainer"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const entriesContainer = document.getElementById('entriesContainer');
+
+            // Function to display all output entries from local storage
+            function displayOutputEntries() {
+                entriesContainer.innerHTML = ''; // Clear previous entries
+                const maxPageNumber = localStorage.getItem('pageNumber') || 1;
+                for (let i = 1; i <= maxPageNumber; i++) {
+                    const key = `outputText_${i}`;
+                    const outputText = localStorage.getItem(key);
+                    if (outputText) {
+                        const copyButton = document.createElement('button');
+                        copyButton.textContent = 'Copy';
+                        copyButton.addEventListener('click', function () {
+                            navigator.clipboard.writeText(outputText)
+                                .then(() => {
+                                    console.log('Output copied to clipboard:', outputText);
+                                })
+                                .catch(err => {
+                                    console.error('Failed to copy output to clipboard: ', err);
+                                });
+                        });
+                        const pageLabel = document.createElement('div');
+                        pageLabel.textContent = `Page ${i}`;
+                        const entry = document.createElement('div');
+                        entry.appendChild(pageLabel);
+                        entry.appendChild(copyButton);
+                        entriesContainer.appendChild(entry);
+                    }
+                }
+            }
+
+            // Display the output entries from local storage
+            displayOutputEntries();
+        });
+    </script>
+</body>
+
+</html>
