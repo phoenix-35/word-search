@@ -34,6 +34,18 @@
                 localStorage.setItem('outputEntriesCount', 0);
             }
 
+            // Function to display all output entries from local storage
+            function displayOutputEntries() {
+                let outputText = '';
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('outputText_')) {
+                        outputText += localStorage.getItem(key) + '\n';
+                    }
+                }
+                outputResult.textContent = outputText || "No saved output available.";
+            }
+
             // Retrieve the toggle switch state from local storage on page load
             const toggleSwitchState = localStorage.getItem('toggleSwitchState');
             if (toggleSwitchState === 'on') {
@@ -58,13 +70,8 @@
                 }
             });
 
-            // Display the output text from local storage
-            const outputText = localStorage.getItem('outputText');
-            if (outputText) {
-                outputResult.textContent = outputText;
-            } else {
-                outputResult.textContent = "No saved output available.";
-            }
+            // Display the output entries from local storage
+            displayOutputEntries();
         });
     </script>
 </body>
