@@ -10,10 +10,16 @@
 
     <script>
         window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            const outputText = params.get('output');
+            // Retrieve output text from local storage
+            const outputText = localStorage.getItem('outputText');
             const outputResult = document.getElementById('outputResult');
-            outputResult.textContent = outputText;
+            
+            // Display the output text
+            if (outputText) {
+                outputResult.textContent = outputText;
+            } else {
+                outputResult.textContent = "No saved output available.";
+            }
         };
     </script>
 </body>
