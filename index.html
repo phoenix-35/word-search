@@ -93,6 +93,17 @@
                 // Increment the page number for the next output
                 pageNumber++;
                 localStorage.setItem('pageNumber', pageNumber);
+
+                // Update the count of output entries
+                let outputEntriesCount = localStorage.getItem('outputEntriesCount') || 0;
+                outputEntriesCount++;
+                localStorage.setItem('outputEntriesCount', outputEntriesCount);
+                updateWordEntriesCount(outputEntriesCount);
+            }
+
+            function updateWordEntriesCount(count) {
+                const wordEntries = document.getElementById('wordEntries');
+                wordEntries.textContent = `Word Entries: ${count}`;
             }
 
             textarea.addEventListener('input', function () {
@@ -123,16 +134,9 @@
                 }, 3000); // Hide the success message after 3 seconds
             });
 
-            // Retrieve the number of output entries from local storage and display it
-            let outputEntriesCount = 0;
-            for (let i = 1; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('outputText_')) {
-                    outputEntriesCount++;
-                }
-            }
-            const wordEntries = document.getElementById('wordEntries');
-            wordEntries.textContent = `Word Entries: ${outputEntriesCount}`;
+            // Display the count of output entries on page load
+            const outputEntriesCount = localStorage.getItem('outputEntriesCount') || 0;
+            updateWordEntriesCount(outputEntriesCount);
         });
     </script>
 </body>
