@@ -27,8 +27,6 @@
                     if (key.startsWith('outputText_')) {
                         const pageNumber = Math.ceil((i + 1) / entriesPerPage);
                         const outputText = localStorage.getItem(key);
-                        const pageLabel = document.createElement('div');
-                        pageLabel.textContent = `Page ${pageNumber}`;
                         const copyButton = document.createElement('button');
                         copyButton.textContent = 'Copy';
                         copyButton.addEventListener('click', function () {
@@ -40,10 +38,11 @@
                                     console.error('Failed to copy output to clipboard: ', err);
                                 });
                         });
+                        const pageLabel = document.createElement('div');
+                        pageLabel.textContent = `Page ${pageNumber}`;
                         const entry = document.createElement('div');
-                        entry.textContent = outputText;
-                        entry.appendChild(copyButton);
                         entry.appendChild(pageLabel);
+                        entry.appendChild(copyButton);
                         entriesContainer.appendChild(entry);
                     }
                 }
