@@ -11,27 +11,34 @@
 <body>
     <div class="container">
         <h1>Words List</h1>
-        <div id="outputResult"></div>
+        <div id="entriesContainer"></div>
         <div id="pageLabel">Page 1</div>
         <button type="button" id="copyButton" class="submit-button">Copy</button>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const outputResult = document.getElementById('outputResult');
+            const entriesContainer = document.getElementById('entriesContainer');
             const pageLabel = document.getElementById('pageLabel');
             const copyButton = document.getElementById('copyButton');
 
             // Function to display all output entries from local storage
             function displayOutputEntries() {
-                let outputText = '';
+                entriesContainer.innerHTML = ''; // Clear previous entries
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
                     if (key.startsWith('outputText_')) {
-                        outputText += localStorage.getItem(key) + '\n';
+                        const entry = document.createElement('div');
+                        entry.textContent = localStorage.getItem(key);
+                        entriesContainer.appendChild(entry);
                     }
                 }
-                outputResult.textContent = outputText || "No saved output available.";
+            }
+
+            // Function to update the page label
+            function updatePageLabel() {
+                const pageNumber = localStorage.getItem('pageNumber') || 1;
+                pageLabel.textContent = "Page " + pageNumber;
             }
 
             // Function to clear all output entries from local storage
@@ -44,27 +51,9 @@
                 }
             }
 
-            // Function to update the page label
-            function updatePageLabel() {
-                const pageNumber = localStorage.getItem('pageNumber') || 1;
-                pageLabel.textContent = "Page " + pageNumber;
-            }
-
-            // Retrieve the toggle switch state from local storage on page load
-            const toggleSwitchState = localStorage.getItem('toggleSwitchState');
-            if (toggleSwitchState === 'on') {
-                // Update the display
-                displayOutputEntries();
-                // Update the page label
-                updatePageLabel();
-            } else {
-                // Clear all output entries when switch is turned off
-                clearOutputEntries();
-            }
-
             // Event listener for the copy button
             copyButton.addEventListener('click', function () {
-                const outputText = outputResult.textContent;
+                const outputText = Array.from(entriesContainer.children).map(child => child.textContent).join('\n');
                 if (outputText) {
                     navigator.clipboard.writeText(outputText)
                         .then(() => {
