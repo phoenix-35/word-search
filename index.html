@@ -109,19 +109,18 @@
             });
 
             function saveOutputToLocalStorage(outputText) {
-                // Get the current page number
-                let pageNumber = localStorage.getItem('pageNumber') || 1;
-                // Store the output with a unique key for each page
-                localStorage.setItem(`outputText_${pageNumber}`, `${pageNumber}. ${outputText}`);
-                // Increment the page number for the next output
-                pageNumber++;
-                localStorage.setItem('pageNumber', pageNumber);
-
-                // Update the count of output entries
-                let outputEntriesCount = localStorage.getItem('outputEntriesCount') || 0;
-                outputEntriesCount++;
-                localStorage.setItem('outputEntriesCount', outputEntriesCount);
-                updateWordEntriesCount(outputEntriesCount);
+    // Get the current page number
+    let pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
+    // Store the output with a unique key for each page
+    localStorage.setItem(`outputText_${pageNumber}`, outputText);
+    // Increment the page number for the next output
+    pageNumber++;
+    localStorage.setItem('pageNumber', pageNumber);
+    // Update the count of output entries
+    let outputEntriesCount = localStorage.getItem('outputEntriesCount') || 0;
+    outputEntriesCount++;
+    localStorage.setItem('outputEntriesCount', outputEntriesCount);
+    updateWordEntriesCount(outputEntriesCount);
             }
 
             function updateWordEntriesCount(count) {
