@@ -1,60 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Outputs</title>
     <link rel="stylesheet" href="styles.css">
-    <title>Words List</title>
 </head>
+
 <body>
     <div class="container">
-        <h1>Words List</h1>
-        <div id="outputResult"></div>
+        <h1>Saved Outputs</h1>
+        <div id="outputsContainer"></div>
     </div>
 
     <script>
-        window.onload = function() {
-            // Retrieve output text from local storage
-            const outputText = localStorage.getItem('outputText');
-            const outputResult = document.getElementById('outputResult');
-            
-            // Display "Page 1" and copy button
-            if (outputText) {
-                const outputContainer = document.createElement('div');
-                outputContainer.classList.add('output-container');
+        document.addEventListener('DOMContentLoaded', function () {
+            const outputsContainer = document.getElementById('outputsContainer');
 
-                const pageLabel = document.createElement('span');
-                pageLabel.textContent = "Page 1";
+            // Retrieve the total number of pages from local storage
+            const pageNumber = localStorage.getItem('pageNumber') || 1;
 
-                const copyButton = document.createElement('button');
-                copyButton.textContent = "Copy";
-                copyButton.classList.add('submit-button');
-                copyButton.onclick = function() {
-                    copyToClipboard(outputText);
-                };
+            // Loop through each page and display its output
+            for (let i = 1; i < pageNumber; i++) {
+                const outputText = localStorage.getItem(`outputText_${i}`);
+                if (outputText) {
+                    const outputContainer = document.createElement('div');
+                    outputContainer.classList.add('output-container');
 
-                outputContainer.appendChild(pageLabel);
-                
-                // Add some margin between "Page 1" and the copy button
-                copyButton.style.marginLeft = "10px";
+                    const pageLabel = document.createElement('span');
+                    pageLabel.textContent = `Page ${i}`;
 
-                outputContainer.appendChild(copyButton);
+                    const outputDisplay = document.createElement('div');
+                    outputDisplay.textContent = outputText;
 
-                outputResult.appendChild(outputContainer);
-            } else {
-                outputResult.textContent = "No saved output available.";
+                    outputContainer.appendChild(pageLabel);
+                    outputContainer.appendChild(outputDisplay);
+
+                    outputsContainer.appendChild(outputContainer);
+                }
             }
-        };
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text)
-                .then(() => {
-                    console.log('Text copied to clipboard:', text);
-                })
-                .catch(err => {
-                    console.error('Failed to copy text to clipboard: ', err);
-                });
-        }
+        });
     </script>
 </body>
+
 </html>
