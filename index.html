@@ -123,10 +123,16 @@
                 }, 3000); // Hide the success message after 3 seconds
             });
 
-            // Retrieve the number of word entries from local storage and display it
-            const wordEntriesCount = localStorage.getItem('wordEntriesCount') || 0;
+            // Retrieve the number of output entries from local storage and display it
+            let outputEntriesCount = 0;
+            for (let i = 1; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('outputText_')) {
+                    outputEntriesCount++;
+                }
+            }
             const wordEntries = document.getElementById('wordEntries');
-            wordEntries.textContent = `Word Entries: ${wordEntriesCount}`;
+            wordEntries.textContent = `Word Entries: ${outputEntriesCount}`;
         });
     </script>
 </body>
