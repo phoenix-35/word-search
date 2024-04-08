@@ -47,6 +47,7 @@
             const outputResult = document.getElementById('outputResult');
             const toggleSwitch = document.getElementById('toggleSwitch');
             const appendSwitch = document.getElementById('appendSwitch');
+            const wordEntries = document.getElementById('wordEntries');
             const track = document.querySelector('.track');
 
             function clearOutputEntries() {
@@ -112,13 +113,13 @@
 
             function saveOutputToLocalStorage(outputText) {
                 if (appendSwitch.checked) {
-                    let appendSerialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
-                    const appendKey = `appendText_${appendSerialNumber}`;
+                    let serialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
+                    const appendKey = `appendText_${serialNumber}`;
                     let appendEntry = localStorage.getItem(appendKey) || '';
                     appendEntry += (appendEntry ? '\n' : '') + outputText;
                     localStorage.setItem(appendKey, appendEntry);
-                    appendSerialNumber++;
-                    localStorage.setItem('appendSerialNumber', appendSerialNumber);
+                    serialNumber++;
+                    localStorage.setItem('appendSerialNumber', serialNumber);
                 } else {
                     let pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
                     localStorage.setItem(`outputText_${pageNumber}`, outputText);
@@ -134,17 +135,14 @@
             }
 
             function updateWordEntriesCount(count) {
-                let displayCount = '';
-                if (!appendSwitch.checked) {
-                    const pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
-                    displayCount = `${pageNumber - 1}`;
+                let serialNumber;
+                if (appendSwitch.checked) {
+                    serialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
+                    wordEntries.textContent = `${count}/${serialNumber}`;
                 } else {
-                    const outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
-                    const appendSerialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
-                    displayCount = `${outputEntriesCount}/${appendSerialNumber - 1}`;
+                    serialNumber = parseInt(localStorage.getItem('pageNumber')) - 1 || 0;
+                    wordEntries.textContent = `${serialNumber}`;
                 }
-                const wordEntries = document.getElementById('wordEntries');
-                wordEntries.textContent = `Word Entries: ${displayCount}`;
             }
 
             textarea.addEventListener('input', function () {
