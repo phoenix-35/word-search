@@ -112,6 +112,9 @@
             });
 
             function saveOutputToLocalStorage(outputText) {
+                let pageNumber;
+                let outputEntriesCount;
+                
                 if (appendSwitch.checked) {
                     let serialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
                     const appendKey = `appendText_${serialNumber}`;
@@ -120,27 +123,29 @@
                     localStorage.setItem(appendKey, appendEntry);
                     serialNumber++;
                     localStorage.setItem('appendSerialNumber', serialNumber);
+                    pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
+                    outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
                 } else {
-                    let pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
+                    pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
                     localStorage.setItem(`outputText_${pageNumber}`, outputText);
+                    outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
                     pageNumber++;
                     localStorage.setItem('pageNumber', pageNumber);
                 }
 
-                let outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
                 outputEntriesCount++;
                 localStorage.setItem('outputEntriesCount', outputEntriesCount);
 
-                updateWordEntriesCount(outputEntriesCount);
+                updateWordEntriesCount(outputEntriesCount, pageNumber);
             }
 
-            function updateWordEntriesCount(count) {
+            function updateWordEntriesCount(count, pageNumber) {
                 let serialNumber;
                 if (appendSwitch.checked) {
                     serialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
                     wordEntries.textContent = `${count}/${serialNumber}`;
                 } else {
-                    serialNumber = parseInt(localStorage.getItem('pageNumber')) - 1 || 0;
+                    serialNumber = pageNumber - 1 || 0;
                     wordEntries.textContent = `${serialNumber}`;
                 }
             }
@@ -170,7 +175,7 @@
             });
 
             const outputEntriesCount = localStorage.getItem('outputEntriesCount') || 0;
-            updateWordEntriesCount(outputEntriesCount);
+            updateWordEntriesCount(outputEntriesCount, 1);
         });
     </script>
 </body>
