@@ -143,7 +143,7 @@
                 let serialNumber;
                 if (appendSwitch.checked) {
                     serialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
-                    wordEntries.textContent = `${pageNumber - 1}/${serialNumber}`;
+                    wordEntries.textContent = `${pageNumber - 1}/${serialNumber - 1}`;
                 } else {
                     serialNumber = pageNumber - 1 || 0;
                     wordEntries.textContent = `${serialNumber}`;
