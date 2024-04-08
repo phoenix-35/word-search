@@ -49,7 +49,6 @@
             const appendSwitch = document.getElementById('appendSwitch');
             const track = document.querySelector('.track');
 
-            // Function to clear all output entries from local storage
             function clearOutputEntries() {
                 const keysToRemove = [];
                 for (let i = 0; i < localStorage.length; i++) {
@@ -135,8 +134,14 @@
             }
 
             function updateWordEntriesCount(count) {
+                const outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
+                const appendSerialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 0;
+                let displayCount = `${outputEntriesCount}`;
+                if (appendSerialNumber > 1) {
+                    displayCount += `/${appendSerialNumber - 1}`;
+                }
                 const wordEntries = document.getElementById('wordEntries');
-                wordEntries.textContent = `Word Entries: ${count}`;
+                wordEntries.textContent = `Word Entries: ${displayCount}`;
             }
 
             textarea.addEventListener('input', function () {
