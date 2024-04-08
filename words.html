@@ -21,8 +21,8 @@
             // Function to display all output entries from local storage
             function displayOutputEntries() {
                 entriesContainer.innerHTML = ''; // Clear previous entries
-                const maxPageNumber = localStorage.getItem('pageNumber') || 1;
-                for (let i = 1; i <= maxPageNumber; i++) {
+                const maxPageNumber = localStorage.getItem('appendSerialNumber') || 1; // Update to appendSerialNumber
+                for (let i = 1; i <= maxPageNumber; i++) { // Update to appendSerialNumber
                     const key = `appendText_${i}`;
                     const outputText = localStorage.getItem(key);
                     if (outputText) {
@@ -31,7 +31,7 @@
                         copyButton.addEventListener('click', function () {
                             navigator.clipboard.writeText(outputText)
                                 .then(() => {
-                                    console.log('Output copied to clipboard:', appendText);
+                                    console.log('Output copied to clipboard:', outputText); // Update to outputText
                                 })
                                 .catch(err => {
                                     console.error('Failed to copy output to clipboard: ', err);
