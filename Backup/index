@@ -47,9 +47,9 @@
             const outputResult = document.getElementById('outputResult');
             const toggleSwitch = document.getElementById('toggleSwitch');
             const appendSwitch = document.getElementById('appendSwitch');
+            const wordEntries = document.getElementById('wordEntries');
             const track = document.querySelector('.track');
 
-            // Function to clear all output entries from local storage
             function clearOutputEntries() {
                 const keysToRemove = [];
                 for (let i = 0; i < localStorage.length; i++) {
@@ -112,6 +112,9 @@
             });
 
             function saveOutputToLocalStorage(outputText) {
+                let pageNumber;
+                let outputEntriesCount;
+                
                 if (appendSwitch.checked) {
                     let serialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
                     const appendKey = `appendText_${serialNumber}`;
@@ -120,23 +123,31 @@
                     localStorage.setItem(appendKey, appendEntry);
                     serialNumber++;
                     localStorage.setItem('appendSerialNumber', serialNumber);
+                    outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
+                    pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
                 } else {
-                    let pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
+                    pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
                     localStorage.setItem(`outputText_${pageNumber}`, outputText);
+                    outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
                     pageNumber++;
                     localStorage.setItem('pageNumber', pageNumber);
                 }
 
-                let outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
                 outputEntriesCount++;
                 localStorage.setItem('outputEntriesCount', outputEntriesCount);
 
-                updateWordEntriesCount(outputEntriesCount);
+                updateWordEntriesCount(outputEntriesCount, pageNumber);
             }
 
-            function updateWordEntriesCount(count) {
-                const wordEntries = document.getElementById('wordEntries');
-                wordEntries.textContent = `Word Entries: ${count}`;
+            function updateWordEntriesCount(count, pageNumber) {
+                let serialNumber;
+                if (appendSwitch.checked) {
+                    serialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
+                    wordEntries.textContent = `${pageNumber - 1}/${serialNumber - 1}`;
+                } else {
+                    serialNumber = pageNumber - 1 || 0;
+                    wordEntries.textContent = `${serialNumber}`;
+                }
             }
 
             textarea.addEventListener('input', function () {
@@ -164,7 +175,8 @@
             });
 
             const outputEntriesCount = localStorage.getItem('outputEntriesCount') || 0;
-            updateWordEntriesCount(outputEntriesCount);
+            const pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
+            updateWordEntriesCount(outputEntriesCount, pageNumber);
         });
     </script>
 </body>
