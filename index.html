@@ -175,7 +175,8 @@
             });
 
             const outputEntriesCount = localStorage.getItem('outputEntriesCount') || 0;
-            updateWordEntriesCount(outputEntriesCount, 1);
+            const pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
+            updateWordEntriesCount(outputEntriesCount, pageNumber);
         });
     </script>
 </body>
