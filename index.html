@@ -135,9 +135,9 @@
 
             function updateWordEntriesCount(count) {
                 const outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
-                const appendSerialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 0;
                 let displayCount = `${outputEntriesCount}`;
-                if (appendSerialNumber > 1) {
+                if (appendSwitch.checked) {
+                    const appendSerialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
                     displayCount += `/${appendSerialNumber - 1}`;
                 }
                 const wordEntries = document.getElementById('wordEntries');
