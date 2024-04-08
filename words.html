@@ -31,12 +31,13 @@
                         const copyButton = document.createElement('button');
                         copyButton.textContent = 'Copy';
                         copyButton.addEventListener('click', function () {
-                            navigator.clipboard.writeText(outputText)
+                            const combinedText = appendText + '\n' + outputText;
+                            navigator.clipboard.writeText(combinedText)
                                 .then(() => {
-                                    console.log('Output copied to clipboard:', outputText); // Update to outputText
+                                    console.log('Combined output copied to clipboard:', combinedText);
                                 })
                                 .catch(err => {
-                                    console.error('Failed to copy output to clipboard: ', err);
+                                    console.error('Failed to copy combined output to clipboard: ', err);
                                 });
                         });
                         const pageLabel = document.createElement('div');
