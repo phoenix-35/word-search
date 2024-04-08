@@ -123,8 +123,8 @@
                     localStorage.setItem(appendKey, appendEntry);
                     serialNumber++;
                     localStorage.setItem('appendSerialNumber', serialNumber);
-                    pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
                     outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
+                    pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
                 } else {
                     pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
                     localStorage.setItem(`outputText_${pageNumber}`, outputText);
@@ -143,7 +143,7 @@
                 let serialNumber;
                 if (appendSwitch.checked) {
                     serialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
-                    wordEntries.textContent = `${count}/${serialNumber}`;
+                    wordEntries.textContent = `${pageNumber - 1}/${serialNumber}`;
                 } else {
                     serialNumber = pageNumber - 1 || 0;
                     wordEntries.textContent = `${serialNumber}`;
