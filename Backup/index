@@ -30,6 +30,13 @@
             <button type="button" id="pasteButton" class="submit-button">Paste</button>
             <button type="button" id="copyButton" class="submit-button">Copy</button>
         </form>
+        <div class="toggle-switch">
+            <input type="checkbox" id="appendSwitch">
+            <label for="appendSwitch" class="toggle-label">
+                <div class="track"></div>
+                <div class="ball"></div>
+            </label>
+        </div>
     </div>
 
     <script>
@@ -39,30 +46,27 @@
             const copyButton = document.getElementById('copyButton');
             const outputResult = document.getElementById('outputResult');
             const toggleSwitch = document.getElementById('toggleSwitch');
+            const appendSwitch = document.getElementById('appendSwitch');
             const track = document.querySelector('.track');
 
             // Function to clear all output entries from local storage
             function clearOutputEntries() {
-    // Create a list of keys to remove
-    const keysToRemove = [];
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key.startsWith('outputText_')) {
-            keysToRemove.push(key);
-        }
-    }
-    // Remove the keys from localStorage
-    keysToRemove.forEach(key => {
-        localStorage.removeItem(key);
-    });
-    // Reset the output entries count to 0
-    localStorage.setItem('outputEntriesCount', 0);
-    // Reset the page number to 1
-    localStorage.setItem('pageNumber', 1);
-    updateWordEntriesCount(0);
-}
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('outputText_') || key.startsWith('appendText_')) {
+                        keysToRemove.push(key);
+                    }
+                }
+                keysToRemove.forEach(key => {
+                    localStorage.removeItem(key);
+                });
+                localStorage.setItem('outputEntriesCount', 0);
+                localStorage.setItem('pageNumber', 1);
+                localStorage.setItem('appendSerialNumber', 1);
+                updateWordEntriesCount(0);
+            }
 
-            // Retrieve the toggle switch state from local storage on page load
             const toggleSwitchState = localStorage.getItem('toggleSwitchState');
             if (toggleSwitchState === 'on') {
                 toggleSwitch.checked = true;
@@ -70,7 +74,6 @@
             } else {
                 toggleSwitch.checked = false;
                 track.style.backgroundColor = 'gray';
-                // Clear all output entries when switch is turned off
                 clearOutputEntries();
             }
 
@@ -81,7 +84,6 @@
                 } else {
                     track.style.backgroundColor = 'gray';
                     localStorage.setItem('toggleSwitchState', 'off');
-                    // Clear all output entries when switch is turned off
                     clearOutputEntries();
                 }
             });
@@ -90,7 +92,6 @@
                 navigator.clipboard.readText()
                     .then(text => {
                         textarea.value = text;
-                        // Trigger the input event manually
                         textarea.dispatchEvent(new Event('input'));
                     })
                     .catch(err => {
@@ -111,18 +112,26 @@
             });
 
             function saveOutputToLocalStorage(outputText) {
-    // Get the current page number
-    let pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
-    // Store the output with a unique key for each page
-    localStorage.setItem(`outputText_${pageNumber}`, outputText);
-    // Increment the page number for the next output
-    pageNumber++;
-    localStorage.setItem('pageNumber', pageNumber);
-    // Update the count of output entries
-    let outputEntriesCount = localStorage.getItem('outputEntriesCount') || 0;
-    outputEntriesCount++;
-    localStorage.setItem('outputEntriesCount', outputEntriesCount);
-    updateWordEntriesCount(outputEntriesCount);
+                if (appendSwitch.checked) {
+                    let serialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
+                    const appendKey = `appendText_${serialNumber}`;
+                    let appendEntry = localStorage.getItem(appendKey) || '';
+                    appendEntry += (appendEntry ? '\n' : '') + outputText;
+                    localStorage.setItem(appendKey, appendEntry);
+                    serialNumber++;
+                    localStorage.setItem('appendSerialNumber', serialNumber);
+                } else {
+                    let pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
+                    localStorage.setItem(`outputText_${pageNumber}`, outputText);
+                    pageNumber++;
+                    localStorage.setItem('pageNumber', pageNumber);
+                }
+
+                let outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
+                outputEntriesCount++;
+                localStorage.setItem('outputEntriesCount', outputEntriesCount);
+
+                updateWordEntriesCount(outputEntriesCount);
             }
 
             function updateWordEntriesCount(count) {
@@ -132,12 +141,10 @@
 
             textarea.addEventListener('input', function () {
                 let lines = textarea.value.split('\n');
-                let filteredLines = lines.map(line => line.replace(/^\s*\d+\.\s*/, '')) // Remove bullet points
-                    .filter(line => line.length <= 13 && line.trim() !== '' && /^[a-zA-Z\s]*$/.test(line)); // Filter by length, remove empty lines, and special characters
-                // Convert lines to uppercase
+                let filteredLines = lines.map(line => line.replace(/^\s*\d+\.\s*/, ''))
+                    .filter(line => line.length <= 13 && line.trim() !== '' && /^[a-zA-Z\s]*$/.test(line));
                 filteredLines = filteredLines.map(line => line.toUpperCase());
 
-                // Limit output to a maximum of 20 lines
                 if (filteredLines.length > 20) {
                     filteredLines = filteredLines.slice(0, 20);
                     textarea.value = filteredLines.join('\n');
@@ -145,20 +152,17 @@
                     textarea.value = filteredLines.join('\n');
                 }
 
-                // Display the total number of text lines left
                 outputResult.textContent = `Total lines: ${filteredLines.length}`;
             });
 
             submitButton.addEventListener('click', function (event) {
                 event.preventDefault();
-                // Additional processing if needed
                 successMessage.style.display = 'block';
                 setTimeout(function () {
                     successMessage.style.display = 'none';
-                }, 3000); // Hide the success message after 3 seconds
+                }, 3000);
             });
 
-            // Display the count of output entries on page load
             const outputEntriesCount = localStorage.getItem('outputEntriesCount') || 0;
             updateWordEntriesCount(outputEntriesCount);
         });
