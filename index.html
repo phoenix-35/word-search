@@ -112,13 +112,13 @@
 
             function saveOutputToLocalStorage(outputText) {
                 if (appendSwitch.checked) {
-                    let serialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
-                    const appendKey = `appendText_${serialNumber}`;
+                    let appendSerialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
+                    const appendKey = `appendText_${appendSerialNumber}`;
                     let appendEntry = localStorage.getItem(appendKey) || '';
                     appendEntry += (appendEntry ? '\n' : '') + outputText;
                     localStorage.setItem(appendKey, appendEntry);
-                    serialNumber++;
-                    localStorage.setItem('appendSerialNumber', serialNumber);
+                    appendSerialNumber++;
+                    localStorage.setItem('appendSerialNumber', appendSerialNumber);
                 } else {
                     let pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
                     localStorage.setItem(`outputText_${pageNumber}`, outputText);
@@ -134,11 +134,14 @@
             }
 
             function updateWordEntriesCount(count) {
-                const outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
-                let displayCount = `${outputEntriesCount}`;
-                if (appendSwitch.checked) {
+                let displayCount = '';
+                if (!appendSwitch.checked) {
+                    const pageNumber = parseInt(localStorage.getItem('pageNumber')) || 1;
+                    displayCount = `${pageNumber - 1}`;
+                } else {
+                    const outputEntriesCount = parseInt(localStorage.getItem('outputEntriesCount')) || 0;
                     const appendSerialNumber = parseInt(localStorage.getItem('appendSerialNumber')) || 1;
-                    displayCount += `/${appendSerialNumber - 1}`;
+                    displayCount = `${outputEntriesCount}/${appendSerialNumber - 1}`;
                 }
                 const wordEntries = document.getElementById('wordEntries');
                 wordEntries.textContent = `Word Entries: ${displayCount}`;
