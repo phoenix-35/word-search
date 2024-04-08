@@ -31,7 +31,7 @@
                         const copyButton = document.createElement('button');
                         copyButton.textContent = 'Copy';
                         copyButton.addEventListener('click', function () {
-                            const combinedText = appendText + '\n' + outputText;
+                            const combinedText = `${outputText}\n\n${appendText}`;
                             navigator.clipboard.writeText(combinedText)
                                 .then(() => {
                                     console.log('Combined output copied to clipboard:', combinedText);
